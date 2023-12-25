@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import Logo from "../../images/logo.png";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
-import { NavbarItems } from "./NavbarItems";
+import { NavbarItems } from ".";
 
 export const Navbar: FC = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -12,11 +12,11 @@ export const Navbar: FC = () => {
       <div className="md:flex-[0.5] flex-initial justify-center items-center">
         <img src={Logo} alt="logo" className="w-32 cursor-pointer" />
       </div>
-      <ul className="text-gray-800 md:flex hidden list-none flex-row justify-between items-center flex-initial">
+      <ul className="font-semibold md:flex hidden list-none flex-row justify-between items-center flex-initial">
         {navItems.map((item) => (
           <NavbarItems key={item} title={item} />
         ))}
-        <li className="bg-blue-300 py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-blue-400">
+        <li className="bg-purple-400 py-2 px-7 mx-4 rounded-full text-white cursor-pointer hover:bg-purple-500">
           Login
         </li>
       </ul>

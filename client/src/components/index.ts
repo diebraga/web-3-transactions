@@ -4,4 +4,6 @@ export { Navbar } from "./Navbar";
 export { Services } from "./Services";
 export { Transactions } from "./Transactions";
 export { Welcome } from "./Welcome";
-
+export { NavbarItems } from "./NavbarItems";
+export { FeaturesGrid } from "./FeaturesGrid";
+export { CreditCard } from "./CreditCard";
