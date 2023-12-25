@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import Logo from "../../images/logo.png";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
-import { NavbarItems } from ".";
+import { Button, NavbarItems } from ".";
 
 export const Navbar: FC = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -16,9 +16,7 @@ export const Navbar: FC = () => {
         {navItems.map((item) => (
           <NavbarItems key={item} title={item} />
         ))}
-        <li className="bg-purple-400 py-2 px-7 mx-4 rounded-full text-white cursor-pointer hover:bg-purple-500">
-          Login
-        </li>
+        <Button className="py-2 px-7 mx-4">Login</Button>
       </ul>
       <div className="flex relative">
         {!isOpenMenu && (

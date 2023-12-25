@@ -4,7 +4,7 @@ type FormInputType = {
   placeholder: string;
   name: string;
   type: string;
-  value: string;
+  value?: string;
   handleChange: (e: ChangeEvent<HTMLInputElement>, name: string) => void;
 };
 export const FormInput: FC<FormInputType> = ({

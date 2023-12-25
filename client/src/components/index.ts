@@ -7,3 +7,6 @@ export { Welcome } from "./Welcome";
 export { NavbarItems } from "./NavbarItems";
 export { FeaturesGrid } from "./FeaturesGrid";
 export { CreditCard } from "./CreditCard";
+export { FormInput } from "./FormInput";
+export { WelcomeForm } from "./WelcomeForm";
+export { Button } from "./Button";
