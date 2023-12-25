@@ -25,7 +25,7 @@ export const Welcome: FC = () => {
 
         <div className="flex flex-col flex-1 items-center justify-start w-full md:mt-0 mt-10">
           <CreditCard />
-          <WelcomeForm handleChange={() => {}} />
+          <WelcomeForm handleChange={() => {}} handleSubmit={() => {}} />
         </div>
       </div>
     </div>
