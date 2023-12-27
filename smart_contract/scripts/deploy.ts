@@ -5,8 +5,13 @@ async function main() {
   const transactions = await Trasactions.deploy();
 
   await transactions.waitForDeployment();
+  const receipt = await transactions.deploymentTransaction()?.wait();
 
-  console.log(`Trasactions contract deployed`);
+  console.log(
+    `Trasactions contract deployed to ` + (await transactions.getAddress())
+  );
+
+  console.log(`Gas used for deployment: ${receipt?.gasPrice.toString()}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

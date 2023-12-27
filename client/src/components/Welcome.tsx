@@ -1,7 +1,9 @@
 import { Button, CreditCard, FeaturesGrid, WelcomeForm } from ".";
 import { FC } from "react";
+import { useTransactions } from "../hooks/useTransaction";
 
 export const Welcome: FC = () => {
+  const { connectWalletToMetaMask } = useTransactions();
   return (
     <div className="flex w-full justify-center items-center">
       <div className="flex md:flex-row flex-col items-start justify-between py-12 px-4">
@@ -14,7 +16,7 @@ export const Welcome: FC = () => {
           </p>
           <Button
             type="button"
-            // onClick={connectWallet}
+            onClick={connectWalletToMetaMask}
             className="flex flex-row justify-center items-center my-5 p-3 rounded-full cursor-pointer w-full"
           >
             <p className="text-white text-base font-semibold">Connect Wallet</p>

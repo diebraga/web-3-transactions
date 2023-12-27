@@ -4,7 +4,7 @@ import { SiEthereum } from "react-icons/si";
 
 export const CreditCard: FC = () => {
   return (
-    <div className="p-3 flex min-h-56 justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 bg-gradient-to-br from-purple-400 via-red-400 to-green-300 white-glassmorphism">
+    <div className="p-3 flex justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 bg-gradient-to-br from-purple-400 via-red-400 to-green-300">
       <div className="flex justify-between flex-col w-full h-full">
         <div className="flex justify-between items-start">
           <div className="w-10 h-10 rounded-full border-2 border-white flex justify-center items-center">
