@@ -1,18 +1,15 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { ethers, Eip1193Provider } from "ethers";
-import { contractAbi, contractAddress } from "../utils/constants";
-
-interface TransactionsProviderProps {
-  children: ReactNode;
-}
-
-interface TransactionsContextProps {
-  connectWalletToMetaMask: () => Promise<void>;
-}
-
-export const TransactionsContext = createContext<TransactionsContextProps>(
-  {} as TransactionsContextProps
-);
+import {
+  contractAbi,
+  contractAddress,
+  formDataState,
+} from "../utils/constants";
+import { handleNoEthObjError } from "../utils/handleNoEthObjError";
+import {
+  MetamaskMethodType,
+  requestAccountsMetamask,
+} from "../utils/requestAccountsMetamask";
 
 declare global {
   interface Window {
@@ -20,8 +17,34 @@ declare global {
   }
 }
 
+interface TransactionsProviderProps {
+  children: ReactNode;
+}
+
+interface TransactionsContextProps {
+  connectWalletToMetaMask: () => Promise<void>;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>, name: string) => void;
+  sendTransaction: () => Promise<void>;
+  setformData: React.Dispatch<React.SetStateAction<typeof formDataState>>;
+  currAccount: string;
+  formData: typeof formDataState;
+}
+
+export const TransactionsContext = createContext<TransactionsContextProps>(
+  {} as TransactionsContextProps
+);
+
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
-  const [currAccount, setCurrAccount] = useState();
+  const [currAccount, setCurrAccount] = useState("");
+  const [formData, setformData] = useState(formDataState);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    name: string
+  ) => {
+    setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  };
+
   const createEthereumContract = async () => {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -31,40 +54,45 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       signer
     );
 
+    console.log({
+      provider,
+      signer,
+      transactionsContract,
+    });
+
     return transactionsContract;
   };
 
   const checkWalletConnection = async () => {
-    if (!window.ethereum) alert("Please download metamask!");
+    try {
+      const { accounts } = await requestAccountsMetamask(
+        MetamaskMethodType.EthAccounts
+      );
 
-    const accounts = await window.ethereum.request({ method: "eth_accounts" });
-
-    if (accounts) {
-      setCurrAccount(accounts[0]);
-    } else {
-      console.log("No accounts found");
+      if (accounts) {
+        setCurrAccount(accounts[0]);
+      } else {
+        console.log("No accounts found");
+      }
+    } catch (error) {
+      handleNoEthObjError(error);
     }
   };
 
   const connectWalletToMetaMask = async () => {
     try {
-      if (!window.ethereum) alert("Please download metamask!");
-
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
+      const { accounts } = await requestAccountsMetamask(
+        MetamaskMethodType.EthRequestAccounts
+      );
 
       setCurrAccount(accounts[0]);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log(error.message);
-        alert(error.message);
-      } else {
-        console.log("An unexpected error occurred");
-        alert("An unexpected error occurred");
-      }
-      throw new Error("No eth object");
+      handleNoEthObjError(error);
     }
+  };
+
+  const sendTransaction = async () => {
+    await createEthereumContract();
   };
 
   useEffect(() => {
@@ -72,7 +100,16 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   }, []);
 
   return (
-    <TransactionsContext.Provider value={{ connectWalletToMetaMask }}>
+    <TransactionsContext.Provider
+      value={{
+        connectWalletToMetaMask,
+        currAccount,
+        handleChange,
+        formData,
+        setformData,
+        sendTransaction,
+      }}
+    >
       {children}
     </TransactionsContext.Provider>
   );

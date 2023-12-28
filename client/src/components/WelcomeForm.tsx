@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { FC, FormEvent } from "react";
 import { Button, FormInput, Loader } from ".";
 
 type WelcomeFormProps = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>, name: string) => void;
-  handleSubmit: () => void;
+  handleSubmit: (e: FormEvent) => void;
 };
 export const WelcomeForm: FC<WelcomeFormProps> = ({
   handleChange,
@@ -35,17 +35,17 @@ export const WelcomeForm: FC<WelcomeFormProps> = ({
         type="text"
         handleChange={handleChange}
       />
-      {!true ? (
+      {/* {!true ? (
         <Loader />
-      ) : (
-        <Button
-          type="button"
-          onClick={handleSubmit}
-          className="mt-2 font-semibold w-full py-2 px-7 mx-4"
-        >
-          Send now
-        </Button>
-      )}
+      ) : ( */}
+      <Button
+        type="button"
+        onClick={handleSubmit}
+        className="mt-2 font-semibold w-full py-2 px-7 mx-4"
+      >
+        Send now
+      </Button>
+      {/* )} */}
     </div>
   );
 };
