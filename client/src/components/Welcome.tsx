@@ -3,14 +3,8 @@ import { FC, FormEvent } from "react";
 import { useTransactions } from "../hooks/useTransaction";
 
 export const Welcome: FC = () => {
-  const {
-    connectWalletToMetaMask,
-    currAccount,
-    formData,
-    handleChange,
-    setformData,
-    sendTransaction,
-  } = useTransactions();
+  const { connectWalletToMetaMask, currAccount, formData, sendTransaction } =
+    useTransactions();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -45,10 +39,7 @@ export const Welcome: FC = () => {
 
         <div className="flex flex-col flex-1 items-center justify-start w-full md:mt-0 mt-10">
           <CreditCard />
-          <WelcomeForm
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
+          <WelcomeForm handleSubmit={handleSubmit} />
         </div>
       </div>
     </div>

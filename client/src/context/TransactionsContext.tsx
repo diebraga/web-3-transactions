@@ -1,12 +1,27 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { ethers, Eip1193Provider } from "ethers";
-import { formDataState } from "../utils/constants";
+import {
+  contractAbi,
+  contractAddress,
+  formDataState,
+} from "../utils/constants";
 import { handleNoEthObjError } from "../utils/handleNoEthObjError";
 import {
   MetamaskMethodType,
   requestAccountsMetamask,
 } from "../utils/requestAccountsMetamask";
-import { createEthereumContract } from "../utils/createEthereumContract";
+
+const createEthereumContract = async () => {
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+  const transactionsContract = new ethers.Contract(
+    contractAddress,
+    contractAbi,
+    signer
+  );
+
+  return { transactionsContract, provider, signer };
+};
 
 declare global {
   interface Window {
@@ -50,6 +65,10 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         MetamaskMethodType.EthAccounts
       );
 
+      const { provider } = await createEthereumContract();
+      const network = await provider.getNetwork();
+      console.log({ network: network.name });
+
       if (accounts) {
         setCurrAccount(accounts[0]);
       } else {
@@ -73,30 +92,21 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   };
 
   const sendTransaction = async () => {
-    console.log("trans called");
-
-    if (!window.ethereum) {
-      alert("Please download MetaMask!");
-      return;
-    }
-    const { addressTo, amount, keyword, message } = formData;
-    const value = ethers.parseEther(amount);
-
-    const transactionsContract = await createEthereumContract();
-
     try {
-      await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [
-          {
-            from: currAccount,
-            to: addressTo,
-            gas: "0x5208", // 21000 gwei
-            value,
-          },
-        ],
-      });
+      if (!window.ethereum) {
+        alert("Please download MetaMask!");
+        return;
+      }
 
+      const { addressTo, amount, keyword, message } = formData;
+      const value = ethers.parseEther(amount);
+
+      const { transactionsContract, signer } = await createEthereumContract();
+
+      await signer.sendTransaction({
+        to: addressTo,
+        value,
+      });
       const transactionHash = await transactionsContract.addToBlockChain(
         addressTo,
         value,
@@ -105,22 +115,19 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         keyword
       );
       setIsLoading(true);
-      console.log(`Loading transaction ${transactionHash.hash}`);
       await transactionHash.wait();
       setIsLoading(false);
-      console.log(`Loading success ${transactionHash.hash}`);
-
-      console.log(
-        `Transaction conunt: ${await transactionsContract.getTransactionsCount()}`
-      );
+      const count = await transactionsContract.getTransactionsCount();
+      console.log(`Transaction count: ${count}`);
+      setformData(formDataState);
     } catch (error) {
-      console.log(error);
+      console.error("Transaction failed:", error);
     }
   };
 
   useEffect(() => {
     checkWalletConnection();
-  }, []);
+  }, [currAccount]);
 
   return (
     <TransactionsContext.Provider
