@@ -1,10 +1,13 @@
 import { FC, FormEvent } from "react";
 import { Button, FormInput, Loader } from ".";
 import { useTransactions } from "../hooks/useTransaction";
+import { Alert } from "./Alert";
+import { AlertType } from "../@types";
 
 type WelcomeFormProps = {
   handleSubmit: (e: FormEvent) => void;
 };
+
 export const WelcomeForm: FC<WelcomeFormProps> = ({ handleSubmit }) => {
   const { formData, isLoading, handleChange } = useTransactions();
   return (
@@ -37,7 +40,7 @@ export const WelcomeForm: FC<WelcomeFormProps> = ({ handleSubmit }) => {
         handleChange={handleChange}
         value={formData.message}
       />
-      {!isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <Button
@@ -48,6 +51,7 @@ export const WelcomeForm: FC<WelcomeFormProps> = ({ handleSubmit }) => {
           Send now
         </Button>
       )}
+      <Alert type={AlertType.Info} />
     </div>
   );
 };
