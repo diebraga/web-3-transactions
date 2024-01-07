@@ -6,9 +6,9 @@ function App() {
       <div className="gradient-bg-welcome">
         <Navbar />
         <Welcome />
+        <Services />
+        <Transactions />
       </div>
-      <Services />
-      <Transactions />
       <Footer />
     </div>
   );
