@@ -9,7 +9,14 @@ type WelcomeFormProps = {
 };
 
 export const WelcomeForm: FC<WelcomeFormProps> = ({ handleSubmit }) => {
-  const { formData, isLoading, handleChange } = useTransactions();
+  const {
+    formData,
+    isLoading,
+    handleChange,
+    currNetwork,
+    toggleAlertNetwork,
+    isAlertNetworkShowing,
+  } = useTransactions();
   return (
     <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
       <FormInput
@@ -51,7 +58,12 @@ export const WelcomeForm: FC<WelcomeFormProps> = ({ handleSubmit }) => {
           Send now
         </Button>
       )}
-      <Alert type={AlertType.Info} />
+      <Alert
+        type={AlertType.Info}
+        content={`Network: ${currNetwork}`}
+        onClose={toggleAlertNetwork}
+        isVisible={isAlertNetworkShowing}
+      />
     </div>
   );
 };

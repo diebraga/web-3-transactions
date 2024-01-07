@@ -1,27 +1,13 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { ethers, Eip1193Provider } from "ethers";
-import {
-  contractAbi,
-  contractAddress,
-  formDataState,
-} from "../utils/constants";
+import { formDataState } from "../utils/constants";
 import { handleNoEthObjError } from "../utils/handleNoEthObjError";
 import {
   MetamaskMethodType,
   requestAccountsMetamask,
 } from "../utils/requestAccountsMetamask";
-
-const createEthereumContract = async () => {
-  const provider = new ethers.BrowserProvider(window.ethereum);
-  const signer = await provider.getSigner();
-  const transactionsContract = new ethers.Contract(
-    contractAddress,
-    contractAbi,
-    signer
-  );
-
-  return { transactionsContract, provider, signer };
-};
+import { createEthereumContract } from "../utils/createEthereumContract";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 declare global {
   interface Window {
@@ -38,9 +24,12 @@ interface TransactionsContextProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>, name: string) => void;
   sendTransaction: () => Promise<void>;
   setformData: React.Dispatch<React.SetStateAction<typeof formDataState>>;
+  toggleAlertNetwork: () => void;
   currAccount: string;
   formData: typeof formDataState;
   isLoading: boolean;
+  currNetwork: string;
+  isAlertNetworkShowing: boolean;
 }
 
 export const TransactionsContext = createContext<TransactionsContextProps>(
@@ -49,9 +38,18 @@ export const TransactionsContext = createContext<TransactionsContextProps>(
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [currAccount, setCurrAccount] = useState("");
+  const [currNetwork, setCurrNetwork] = useState("");
+  const [isAlertNetworkShowing, setIsAlertNetworkShowing] = useLocalStorage(
+    "block:chain:diebraga:app",
+    true
+  );
+
   const [formData, setformData] = useState(formDataState);
   const [isLoading, setIsLoading] = useState(false);
 
+  const toggleAlertNetwork = () => {
+    setIsAlertNetworkShowing(!isAlertNetworkShowing);
+  };
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string
@@ -67,8 +65,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
       const { provider } = await createEthereumContract();
       const network = await provider.getNetwork();
-      console.log({ network: network.name });
-
+      setCurrNetwork(network.name);
       if (accounts) {
         setCurrAccount(accounts[0]);
       } else {
@@ -139,6 +136,9 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         setformData,
         sendTransaction,
         isLoading,
+        currNetwork,
+        toggleAlertNetwork,
+        isAlertNetworkShowing,
       }}
     >
       {children}
