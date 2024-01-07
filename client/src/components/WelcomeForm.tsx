@@ -3,6 +3,7 @@ import { Button, FormInput, Loader } from ".";
 import { useTransactions } from "../hooks/useTransaction";
 import { Alert } from "./Alert";
 import { AlertType } from "../@types";
+import { IoInformationCircleOutline } from "react-icons/io5";
 
 type WelcomeFormProps = {
   handleSubmit: (e: FormEvent) => void;
@@ -63,6 +64,7 @@ export const WelcomeForm: FC<WelcomeFormProps> = ({ handleSubmit }) => {
         content={`Network: ${currNetwork}`}
         onClose={toggleAlertNetwork}
         isVisible={isAlertNetworkShowing}
+        icon={<IoInformationCircleOutline />}
       />
     </div>
   );
