@@ -1,22 +1,23 @@
-import { FC } from 'react';
-import { truncateString } from '../utils/truncateString';
-import { useFetch } from '../hooks/useFetch';
+import { FC } from "react";
+import { truncateString } from "../utils/truncateString";
+import { useFetch } from "../hooks/useFetch";
 
 type TransactionsCardProps = {
-    addressTo: string;
-    addressFrom: string;
-    timestamp: string;
-    message?: string;
-    keyword: string;
-    amount: string;
-    url: string;
-  };
-  
+  addressTo: string;
+  addressFrom: string;
+  timestamp: string;
+  message?: string;
+  keyword: string;
+  amount: string;
+  url: string;
+};
+
 const TransactionsCard: FC<TransactionsCardProps> = (props) => {
   const gifUrl = useFetch({ keyword: props.keyword });
 
   return (
-    <div className="bg-[#181918] m-4 flex flex-1
+    <div
+      className="bg-white m-4 flex flex-1
       2xl:min-w-[450px]
       2xl:max-w-[500px]
       sm:min-w-[270px]
@@ -26,17 +27,31 @@ const TransactionsCard: FC<TransactionsCardProps> = (props) => {
     >
       <div className="flex flex-col items-center w-full mt-3">
         <div className="display-flex justify-start w-full mb-6 p-2">
-          <a href={`https://ropsten.etherscan.io/address/${props.addressFrom}`} target="_blank" rel="noreferrer">
-            <p className="text-white text-base">From: {truncateString(props.addressFrom, 20)}</p>
+          <a
+            href={`https://ropsten.etherscan.io/address/${props.addressFrom}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <p className="text-gray-800 text-base">
+              From: {truncateString(props.addressFrom, 20)}
+            </p>
           </a>
-          <a href={`https://ropsten.etherscan.io/address/${props.addressTo}`} target="_blank" rel="noreferrer">
-            <p className="text-white text-base">To: {truncateString(props.addressTo, 20)}</p>
+          <a
+            href={`https://ropsten.etherscan.io/address/${props.addressTo}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <p className="text-gray-800 text-base">
+              To: {truncateString(props.addressTo, 20)}
+            </p>
           </a>
-          <p className="text-white text-base">Amount: {props.amount} ETH</p>
+          <p className="text-gray-800 text-base">Amount: {props.amount} ETH</p>
           {props.message && (
             <>
               <br />
-              <p className="text-white text-base">Message: {props.message}</p>
+              <p className="text-gray-800 text-base">
+                Message: {props.message}
+              </p>
             </>
           )}
         </div>
