@@ -30,7 +30,6 @@ interface TransactionsContextProps {
   isLoading: boolean;
   currNetwork: string;
   isAlertNetworkShowing: boolean;
-  currAdress: string;
 }
 
 export const TransactionsContext = createContext<TransactionsContextProps>(
@@ -40,7 +39,6 @@ export const TransactionsContext = createContext<TransactionsContextProps>(
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [currAccount, setCurrAccount] = useState("");
   const [currNetwork, setCurrNetwork] = useState("");
-  const [currAdress, setCurrAdress] = useState("");
 
   const [isAlertNetworkShowing, setIsAlertNetworkShowing] = useLocalStorage(
     "block:chain:diebraga:app",
@@ -66,10 +64,8 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         MetamaskMethodType.EthAccounts
       );
 
-      const { provider, signer } = await createEthereumContract();
+      const { provider } = await createEthereumContract();
       const network = await provider.getNetwork();
-      const walletAddress = await signer.getAddress();
-      setCurrAdress(walletAddress);
 
       setCurrNetwork(network.name);
       if (accounts) {
@@ -145,7 +141,6 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         currNetwork,
         toggleAlertNetwork,
         isAlertNetworkShowing,
-        currAdress,
       }}
     >
       {children}

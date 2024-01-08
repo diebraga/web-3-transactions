@@ -25,7 +25,7 @@ const ServiceCard: FC<ServiceCardType> = ({ color, title, icon, subtitle }) => (
 );
 
 const Services = () => (
-  <div className="flex w-full justify-center items-center">
+  <div className="flex w-full justify-center">
     <div className="flex flex-col items-start justify-between py-12 px-4">
       <div className="flex flex-1 justify-start items-start flex-col md:mr-10">
         <h1 className="text-gray-800 text-3xl sm:text-5xl py-2 text-gradient ">
