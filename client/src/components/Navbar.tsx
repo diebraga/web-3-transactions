@@ -1,18 +1,18 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import Logo from "../../images/logo.png";
-import { HiMenuAlt4 } from "react-icons/hi";
-import { AiOutlineClose } from "react-icons/ai";
-import { Button, NavbarItems } from ".";
+// import { HiMenuAlt4 } from "react-icons/hi";
+// import { AiOutlineClose } from "react-icons/ai";
+// import { Button, NavbarItems } from ".";
 
 export const Navbar: FC = () => {
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const navItems = ["Market", "Exchange", "Tutorials", "Wallets"];
+  // const [isOpenMenu, setIsOpenMenu] = useState(false);
+  // const navItems = ["Market", "Exchange", "Tutorials", "Wallets"];
   return (
-    <nav className="w-full flex md:justify-center justify-between items-center p-4">
-      <div className="md:flex-[0.5] flex-initial justify-center items-center">
+    <nav className="w-full flex justify-center items-center p-4">
+      <div className="flex justify-center items-center">
         <img src={Logo} alt="logo" className="w-32 cursor-pointer" />
       </div>
-      <ul className="font-semibold md:flex hidden list-none flex-row justify-between items-center flex-initial">
+      {/* <ul className="font-semibold md:flex hidden list-none flex-row justify-between items-center flex-initial">
         {navItems.map((item) => (
           <NavbarItems key={item} title={item} />
         ))}
@@ -46,7 +46,7 @@ export const Navbar: FC = () => {
             ))}
           </ul>
         )}
-      </div>
+      </div> */}
     </nav>
   );
 };
