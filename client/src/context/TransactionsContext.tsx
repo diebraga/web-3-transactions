@@ -2,10 +2,6 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { ethers, Eip1193Provider } from "ethers";
 import { formDataState } from "../utils/constants";
 import { handleNoEthObjError } from "../utils/handleNoEthObjError";
-import {
-  MetamaskMethodType,
-  requestAccountsMetamask,
-} from "../utils/requestAccountsMetamask";
 import { createEthereumContract } from "../utils/createEthereumContract";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { TransactionsCardProps } from "../components/TransactionsCard";
@@ -32,6 +28,8 @@ interface TransactionsContextProps {
   currNetwork: string;
   isAlertNetworkShowing: boolean;
   txs: TransactionsCardProps[];
+  isMetamaskInstalled: boolean;
+  toggleMetamaskAlert: () => void;
 }
 
 export const TransactionsContext = createContext<TransactionsContextProps>(
@@ -51,8 +49,14 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [txs, setTxs] = useState([]);
 
+  const [isMetamaskInstalled, setIsMetamaskInstalled] = useState(true);
+
   const toggleAlertNetwork = () => {
     setIsAlertNetworkShowing(!isAlertNetworkShowing);
+  };
+
+  const toggleMetamaskAlert = () => {
+    setIsMetamaskInstalled(!isMetamaskInstalled);
   };
 
   const handleChange = (
@@ -64,7 +68,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
   const getAllTrasactions = async () => {
     if (!window.ethereum) {
-      alert("Please download MetaMask!");
+      setIsMetamaskInstalled(false);
       return;
     }
 
@@ -92,9 +96,14 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
   const checkWalletConnection = async () => {
     try {
-      const { accounts } = await requestAccountsMetamask(
-        MetamaskMethodType.EthAccounts
-      );
+      if (!window.ethereum) {
+        setIsMetamaskInstalled(false);
+        return;
+      }
+
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
 
       const { provider } = await createEthereumContract();
       const network = await provider.getNetwork();
@@ -112,9 +121,14 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
   const connectWalletToMetaMask = async () => {
     try {
-      const { accounts } = await requestAccountsMetamask(
-        MetamaskMethodType.EthRequestAccounts
-      );
+      if (!window.ethereum) {
+        setIsMetamaskInstalled(false);
+        return;
+      }
+
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
       setCurrAccount(accounts[0]);
     } catch (error: unknown) {
@@ -125,7 +139,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const sendTransaction = async () => {
     try {
       if (!window.ethereum) {
-        alert("Please download MetaMask!");
+        setIsMetamaskInstalled(false);
         return;
       }
 
@@ -175,6 +189,8 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         toggleAlertNetwork,
         isAlertNetworkShowing,
         txs,
+        isMetamaskInstalled,
+        toggleMetamaskAlert,
       }}
     >
       {children}

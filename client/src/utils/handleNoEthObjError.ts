@@ -1,7 +1,6 @@
 export const handleNoEthObjError = (error: unknown) => {
   if (error instanceof Error) {
     console.log(error.message);
-    alert(error.message);
   } else {
     console.log("An unexpected error occurred");
     alert("An unexpected error occurred");
