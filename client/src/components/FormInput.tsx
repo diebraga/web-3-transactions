@@ -20,6 +20,6 @@ export const FormInput: FC<FormInputType> = ({
     step="0.0001"
     value={value}
     onChange={(e) => handleChange(e, name)}
-    className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-gray-800 border-none text-sm white-glassmorphism"
+    className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-gray-800 text-sm white-glassmorphism focus:ring-2 focus:ring-purple-500"
   />
 );

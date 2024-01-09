@@ -1,10 +1,9 @@
 import { FC } from "react";
 import { useTransactions } from "../hooks/useTransaction";
-import { transactionMock } from "../utils/transactionsMock";
 import TransactionsCard from "./TransactionsCard";
 
 export const Transactions: FC = () => {
-  const { currAccount } = useTransactions();
+  const { currAccount, txs } = useTransactions();
 
   return (
     <div className="flex w-full justify-center items-center 2xl:px-20">
@@ -19,12 +18,8 @@ export const Transactions: FC = () => {
           </h3>
         )}
         <div className="flex flex-wrap justify-center items-center mt-10">
-          {transactionMock.reverse().map((transaction) => (
-            <TransactionsCard
-              key={transaction.id}
-              {...transaction}
-              keyword=""
-            />
+          {txs?.reverse().map((transaction, i) => (
+            <TransactionsCard key={i} {...transaction} />
           ))}
         </div>
       </div>

@@ -8,6 +8,7 @@ import {
 } from "../utils/requestAccountsMetamask";
 import { createEthereumContract } from "../utils/createEthereumContract";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { TransactionsCardProps } from "../components/TransactionsCard";
 
 declare global {
   interface Window {
@@ -30,6 +31,7 @@ interface TransactionsContextProps {
   isLoading: boolean;
   currNetwork: string;
   isAlertNetworkShowing: boolean;
+  txs: TransactionsCardProps[];
 }
 
 export const TransactionsContext = createContext<TransactionsContextProps>(
@@ -47,15 +49,45 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
   const [formData, setformData] = useState(formDataState);
   const [isLoading, setIsLoading] = useState(false);
+  const [txs, setTxs] = useState([]);
 
   const toggleAlertNetwork = () => {
     setIsAlertNetworkShowing(!isAlertNetworkShowing);
   };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string
   ) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  };
+
+  const getAllTrasactions = async () => {
+    if (!window.ethereum) {
+      alert("Please download MetaMask!");
+      return;
+    }
+
+    try {
+      const { transactionsContract } = await createEthereumContract();
+
+      const transactions = await transactionsContract.getAllTransactions();
+
+      const formatTransactions = transactions.map((transaction: never) => {
+        return {
+          message: transaction[3],
+          timestamp: new Date(parseInt(transaction[4])).toLocaleString(),
+          addressFrom: transaction[0],
+          amount: ethers.formatEther(transaction[2]),
+          addressTo: transaction[1],
+          keyword: transaction[5],
+        };
+      });
+
+      setTxs(formatTransactions);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const checkWalletConnection = async () => {
@@ -126,6 +158,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
   useEffect(() => {
     checkWalletConnection();
+    getAllTrasactions();
   }, [currAccount]);
 
   return (
@@ -141,6 +174,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         currNetwork,
         toggleAlertNetwork,
         isAlertNetworkShowing,
+        txs,
       }}
     >
       {children}

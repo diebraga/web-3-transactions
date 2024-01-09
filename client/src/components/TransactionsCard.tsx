@@ -1,19 +1,19 @@
 import { FC } from "react";
 import { truncateString } from "../utils/truncateString";
-import { useFetch } from "../hooks/useFetch";
+import { useFetchGif } from "../hooks/useFetchGif";
 
-type TransactionsCardProps = {
+export type TransactionsCardProps = {
   addressTo: string;
   addressFrom: string;
   timestamp: string;
   message?: string;
   keyword: string;
   amount: string;
-  url: string;
+  url?: string;
 };
 
 const TransactionsCard: FC<TransactionsCardProps> = (props) => {
-  const gifUrl = useFetch({ keyword: props.keyword });
+  const gifUrl = useFetchGif({ keyword: props.keyword });
 
   return (
     <div
