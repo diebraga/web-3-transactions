@@ -20,7 +20,7 @@ export const FeaturesGrid: FC = () => {
           title="Reliability"
         />
       </div>
-      <div className={companyCommonStyles}>
+      <div className={`gap-1 ${companyCommonStyles}`}>
         Security{" "}
         <GrSecure className="text-gray-600" size={18} title="Securety" />
       </div>
