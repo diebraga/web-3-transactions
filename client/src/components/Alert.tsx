@@ -16,13 +16,21 @@ export const Alert: FC<AlertProps> = ({
   isVisible,
   icon,
 }) => {
-  const color = `bg-${type}-100 border border-${type}-400 text-${type}-700`;
+  const alertColors: { [key in AlertType]: string } = {
+    [AlertType.Success]: "bg-green-100 border border-green-400 text-green-700",
+    [AlertType.Danger]: "bg-red-100 border border-red-400 text-red-700",
+    [AlertType.Warning]:
+      "bg-yellow-100 border border-yellow-400 text-yellow-700",
+    [AlertType.Info]: "bg-blue-100 border border-blue-400 text-blue-700",
+  };
+
+  const colorClasses = alertColors[type] || "";
 
   return (
     <>
       {isVisible && (
         <div
-          className={`${color} px-4 py-3 rounded relative mt-2 flex w-full justify-between items-center`}
+          className={`${colorClasses} px-4 py-3 rounded relative mt-2 flex w-full justify-between items-center`}
           role="alert"
         >
           <div className="flex items-center gap-2">
@@ -31,7 +39,7 @@ export const Alert: FC<AlertProps> = ({
           </div>
           <span onClick={onClose}>
             <svg
-              className={`fill-current h-6 w-6 ${color.split(" ")[0]}`}
+              className={`fill-current h-6 w-6 ${colorClasses.split(" ")[0]}`}
               role="button"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
