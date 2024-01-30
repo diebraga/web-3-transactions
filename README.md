@@ -9,13 +9,13 @@ netowork and lists all transactions, using solidity hardhat and vite react types
 
 ### Prerequisites
 
-Before running _AppName_, ensure you have the following installed:
+Before running, ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (version 12 or higher)
 - [npm](https://www.npmjs.com/) (version 6 or higher)
 
 ### Installation
 
-To set up _AppName_ locally, follow these steps:
+To set up locally, follow these steps:
 
 1. Clone the repository:
 
